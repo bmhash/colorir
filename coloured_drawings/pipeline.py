@@ -6,6 +6,7 @@ from pathlib import Path
 from PIL import Image
 
 from coloured_drawings.config import get_settings
+from coloured_drawings.image_utils import resize_for_a4
 from coloured_drawings.lineart import to_lineart
 from coloured_drawings.printing import make_print_pdf
 from coloured_drawings.sources import get_source
@@ -30,6 +31,7 @@ def generate(
     """Pipeline completo a partir de um prompt de texto."""
     source = get_source(source_name)
     image = source.fetch(prompt)
+    image = resize_for_a4(image, landscape=landscape)
     out_dir = make_output_dir(get_settings().output_dir, prompt)
     return _finish(image, out_dir, skip_conversion=source.produces_lineart,
                    landscape=landscape, title=title, detail=detail)
@@ -43,6 +45,7 @@ def convert_file(
 ) -> PipelineResult:
     """Converte uma imagem local (foto/desenho) em página para colorir."""
     image = Image.open(input_path).convert("RGB")
+    image = resize_for_a4(image, landscape=landscape)
     out_dir = make_output_dir(get_settings().output_dir, input_path.stem)
     return _finish(image, out_dir, skip_conversion=False,
                    landscape=landscape, title=title, detail=detail)
