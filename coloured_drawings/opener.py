@@ -1,4 +1,4 @@
-"""Abrir ficheiros no visualizador do sistema (suporte WSL2, Linux, macOS)."""
+"""Open files in the system's default viewer (WSL2, Linux, macOS, Windows)."""
 
 import platform
 import shutil
@@ -7,10 +7,10 @@ from pathlib import Path
 
 
 def open_file(path: Path) -> bool:
-    """Abre um ficheiro no visualizador padrão do sistema.
+    """Open a file in the system's default viewer.
 
-    Detecta automaticamente WSL2 e converte o caminho para Windows.
-    Retorna True se conseguiu lançar o comando, False caso contrário.
+    Auto-detects WSL2 and converts the path to Windows format.
+    Returns True if the command was launched, False otherwise.
     """
     path = path.resolve()
 
@@ -28,7 +28,7 @@ def open_file(path: Path) -> bool:
 
 
 def _is_wsl() -> bool:
-    """Detecta se estamos a correr dentro de WSL2."""
+    """Detect if running inside WSL2."""
     try:
         with open("/proc/version") as f:
             return "microsoft" in f.read().lower()
@@ -41,8 +41,8 @@ _CMD_METACHARACTERS = set('&|<>^%"')
 
 
 def _open_wsl(path: Path) -> bool:
-    """Abre um ficheiro via Windows a partir de WSL2."""
-    # Converte caminho Linux → Windows (\\wsl$\...)
+    """Open a file via Windows from WSL2."""
+    # Convert Linux path → Windows UNC path
     try:
         result = subprocess.run(
             ["wslpath", "-w", str(path)],
@@ -58,12 +58,12 @@ def _open_wsl(path: Path) -> bool:
     if _CMD_METACHARACTERS & set(win_path):
         return False
 
-    # Tenta abrir com cmd.exe /c start
+    # Open with cmd.exe /c start
     return _run(["cmd.exe", "/c", "start", "", win_path])
 
 
 def _run(cmd: list[str]) -> bool:
-    """Executa um comando sem bloquear, retorna True se lançou com sucesso."""
+    """Execute a command without blocking, return True if launched successfully."""
     try:
         subprocess.Popen(
             cmd,

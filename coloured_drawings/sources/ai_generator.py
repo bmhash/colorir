@@ -1,4 +1,4 @@
-"""Fonte de imagem por IA (OpenAI gpt-image-1) — gera diretamente line-art para colorir."""
+"""AI image source (OpenAI gpt-image-1) — generates coloring-book line-art directly."""
 
 import base64
 import io
@@ -38,7 +38,7 @@ class AIGeneratorSource(ImageSource):
                 quality="medium",
                 n=1,
             )
-        except Exception as exc:  # noqa: BLE001 — erro amigável para o CLI
+        except Exception as exc:  # noqa: BLE001 — user-friendly error for CLI
             raise SourceError(f"Falha na geração por IA: {exc}") from exc
 
         b64 = response.data[0].b64_json

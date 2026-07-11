@@ -1,4 +1,4 @@
-"""Orquestração do pipeline: aquisição → line-art → PDF pronto a imprimir."""
+"""Pipeline orchestration: image acquisition → line-art → print-ready PDF."""
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -29,7 +29,7 @@ def generate(
     detail: int = 5,
     skip_watermark_check: bool = False,
 ) -> PipelineResult:
-    """Pipeline completo a partir de um prompt de texto."""
+    """Full pipeline from a text prompt."""
     source = get_source(source_name, skip_watermark_check=skip_watermark_check)
     image = source.fetch(prompt)
     image = resize_for_a4(image, landscape=landscape)
@@ -44,7 +44,7 @@ def convert_file(
     title: str | None = None,
     detail: int = 5,
 ) -> PipelineResult:
-    """Converte uma imagem local (foto/desenho) em página para colorir."""
+    """Convert a local image (photo/drawing) into a coloring page."""
     image = Image.open(input_path).convert("RGB")
     image = resize_for_a4(image, landscape=landscape)
     out_dir = make_output_dir(get_settings().output_dir, input_path.stem)

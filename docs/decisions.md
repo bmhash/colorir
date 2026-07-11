@@ -461,7 +461,7 @@ checks, wasting round-trip time.
 
 ### Context and Problem Statement
 
-The README mentions "a v2 (UI web) reutiliza o pipeline sem alterações". We need
+The README mentions that a v2 (web UI) reuses the pipeline without changes. We need
 to choose a web framework that wraps the existing Python pipeline.
 
 ### Considered Options

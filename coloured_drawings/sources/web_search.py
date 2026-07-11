@@ -1,4 +1,4 @@
-"""Fonte de imagem por pesquisa web (DuckDuckGo) — gratuita, qualidade variável."""
+"""Web search image source (DuckDuckGo) — free, variable quality."""
 
 import io
 import ipaddress
@@ -11,12 +11,12 @@ from PIL import Image
 from coloured_drawings.sources.base import ImageSource, SourceError
 from coloured_drawings.sources.watermark_detector import has_watermark
 
-MIN_SIDE = 600  # resolução mínima (691×960 já é suficiente para A4 com resize)
-MAX_SIDE = 8000  # máximo seguro (evita decompression bombs)
+MIN_SIDE = 600  # minimum resolution (691×960 is enough for A4 with resize)
+MAX_SIDE = 8000  # safe maximum (prevents decompression bombs)
 MAX_RESPONSE_BYTES = 50_000_000  # 50 MB max download
 MAX_RESULTS = 20
 TIMEOUT = 15
-WATERMARK_SENSITIVITY = 0.5  # 0.5 = equilibrado (0.7 era demasiado restritivo)
+WATERMARK_SENSITIVITY = 0.5  # 0.5 = balanced (0.7 was too restrictive)
 
 
 class WebSearchSource(ImageSource):
@@ -44,7 +44,7 @@ class WebSearchSource(ImageSource):
         if not results:
             raise SourceError(f"Nenhuma imagem encontrada para '{prompt}'. Tenta outras palavras.")
 
-        # Ordena por tamanho reportado (maiores primeiro) para tentar alta resolução
+        # Sort by reported size (largest first) to try high resolution
         def _size(r):
             try:
                 w = int(r.get("width", 0) or 0)
@@ -94,14 +94,14 @@ class WebSearchSource(ImageSource):
             data = b"".join(chunks)
             image = Image.open(io.BytesIO(data))
             image.load()
-        except Exception:  # noqa: BLE001 — tenta o próximo resultado
+        except Exception:  # noqa: BLE001 — try next result
             return None
         # Dimension safety check (avoid decompression bombs)
         if max(image.size) > MAX_SIDE:
             return None
         if min(image.size) < MIN_SIDE:
             return None
-        # Rejeita imagens com watermark visível (a menos que skip_watermark_check=True)
+        # Reject images with visible watermarks (unless skip_watermark_check=True)
         if not skip_watermark_check and has_watermark(image, sensitivity=WATERMARK_SENSITIVITY):
             return None
         return image.convert("RGB")

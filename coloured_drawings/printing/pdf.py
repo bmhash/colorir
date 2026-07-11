@@ -1,11 +1,11 @@
-"""Composição de página A4 pronta a imprimir (PDF a 300 DPI via Pillow)."""
+"""A4 page composition for printing (PDF at 300 DPI via Pillow)."""
 
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
 DPI = 300
-A4_PORTRAIT = (2480, 3508)  # A4 a 300 DPI, em pixels
+A4_PORTRAIT = (2480, 3508)  # A4 at 300 DPI, in pixels
 MARGIN = 150
 TITLE_SIZE = 90
 TITLE_GAP = 60
@@ -17,7 +17,7 @@ def make_print_pdf(
     landscape: bool = False,
     title: str | None = None,
 ) -> Path:
-    """Centra o desenho numa página A4 com margens e título opcional; grava PDF."""
+    """Center the drawing on an A4 page with margins and optional title; save as PDF."""
     page_size = (A4_PORTRAIT[1], A4_PORTRAIT[0]) if landscape else A4_PORTRAIT
     page = Image.new("RGB", page_size, "white")
     draw = ImageDraw.Draw(page)

@@ -1,4 +1,4 @@
-"""Configuração central: variáveis de ambiente e defaults."""
+"""Central configuration: environment variables and defaults."""
 
 import os
 from dataclasses import dataclass, field

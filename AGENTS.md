@@ -44,8 +44,16 @@ output/                  # Generated drawings (gitignored)
 - **Error handling:** `SourceError` exception for user-friendly CLI errors
 - **Config:** Frozen dataclass loaded from env vars via python-dotenv
 
+## Language Policy
+
+- **Code:** English (docstrings, comments, variable names)
+- **CLI user-facing strings:** Portuguese (PT-PT) — help text, echo messages, error messages shown to users
+- **Documentation:** English (README.md, docs/, AGENTS.md). A PT translation exists at README.pt.md.
+- **Commit messages:** English only
+
 ## Documentation
 
 - `docs/decisions.md` -- Architecture Decision Records (MADR 4.0)
 - `docs/roadmap.md` -- Strategic roadmap with phases
 - `docs/implementation.md` -- Technical implementation guide
+- `docs/security-audit.md` -- Security audit report

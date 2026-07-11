@@ -1,4 +1,4 @@
-"""CLI do gerador de desenhos para colorir."""
+"""CLI for the coloring page generator."""
 
 from pathlib import Path
 from typing import Optional
@@ -93,7 +93,7 @@ def listar() -> None:
 
 
 def _open_pdf(path: Path) -> None:
-    """Tenta abrir o PDF no visualizador do sistema."""
+    """Attempt to open the PDF in the system's default viewer."""
     from coloured_drawings.opener import open_file
 
     if not open_file(path):

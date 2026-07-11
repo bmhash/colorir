@@ -1,10 +1,10 @@
-"""Fontes de imagem: cada fonte implementa a interface ImageSource."""
+"""Image sources: each source implements the ImageSource interface."""
 
 from coloured_drawings.sources.base import ImageSource, SourceError
 
 
 def get_source(name: str, **kwargs) -> ImageSource:
-    """Devolve a fonte de imagem pelo nome ('ai' ou 'web')."""
+    """Return an image source by name ('ai' or 'web')."""
     if name == "ai":
         from coloured_drawings.sources.ai_generator import AIGeneratorSource
 

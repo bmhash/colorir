@@ -5,7 +5,9 @@ Turn any idea into a printable coloring page — just type what you want to draw
 Type a prompt (e.g. `"aladino da Disney"`), and the tool fetches or generates
 a coloring-book-style image and produces a print-ready A4 PDF.
 
-## Instalação
+> [Leia em Portugues](README.pt.md)
+
+## Installation
 
 ```bash
 python -m venv .venv
@@ -13,52 +15,70 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-Para usares a fonte de IA (melhor qualidade), copia `.env.example` para `.env`
-e preenche a `OPENAI_API_KEY`. A fonte `web` é gratuita e não precisa de chave.
+To use the AI source (better quality), copy `.env.example` to `.env` and fill in
+your `OPENAI_API_KEY`. The `web` source is free and requires no API key.
 
-## Utilização
+### Docker (recommended)
 
 ```bash
-# Pipeline completo com IA (requer OPENAI_API_KEY)
+docker build -t colorir .
+docker run --rm -v ./output:/app/output colorir gerar "unicornio" --fonte web
+```
+
+## Usage
+
+```bash
+# Full pipeline with AI (requires OPENAI_API_KEY)
 colorir gerar "aladino da Disney"
 
-# Fonte gratuita: pesquisa web + conversão para line-art
+# Free source: web search + line-art conversion
 colorir gerar "sereia" --fonte web
 
-# Gerar e abrir o PDF automaticamente (WSL2, Linux, macOS)
+# Generate and auto-open the PDF (WSL2, Linux, macOS, Windows)
 colorir gerar "gato" --fonte web --abrir
 
-# Opções
+# Options
 colorir gerar "castelo" --paisagem --sem-titulo
-colorir gerar "gato" --fonte web --detalhe 3      # 1=simples, 9=detalhado
-colorir gerar "cão" --titulo "O meu cão"
+colorir gerar "gato" --fonte web --detalhe 3      # 1=simple, 9=detailed
+colorir gerar "cão" --titulo "My dog"
 
-# Converter uma foto/imagem tua em página para colorir
-colorir converter foto.jpg --abrir
+# Convert a local photo/image to coloring page
+colorir converter photo.jpg --abrir
 
-# Listar desenhos já gerados
+# List previously generated drawings
 colorir listar
 ```
 
-Cada desenho fica em `output/<slug>-<timestamp>/` com:
+Each drawing is saved to `output/<slug>-<timestamp>/` containing:
 
-- **`original.png`** — imagem obtida/gerada
-- **`lineart.png`** — versão em contornos
-- **`print.pdf`** — página A4 a 300 DPI, pronta a imprimir
+- **`original.png`** — fetched/generated image
+- **`lineart.png`** — line-art version (contours only)
+- **`print.pdf`** — A4 page at 300 DPI, ready to print
 
-## Arquitetura
+## Architecture
 
-Pipeline em 3 estágios desacoplados (`coloured_drawings/`):
+3-stage decoupled pipeline (`coloured_drawings/`):
 
-- **`sources/`** — fontes de imagem com interface comum `ImageSource` (`ai` = OpenAI gpt-image-1, `web` = pesquisa DuckDuckGo). Novas fontes adicionam-se aqui.
-- **`lineart/`** — conversão para contornos (OpenCV): filtro bilateral → threshold adaptativo → limpeza → engrossamento de linhas.
-- **`printing/`** — composição da página A4 e exportação PDF (Pillow).
+- **`sources/`** — image sources with a common `ImageSource` interface (`ai` = OpenAI gpt-image-1, `web` = DuckDuckGo search). New sources plug in here.
+- **`lineart/`** — line-art conversion (OpenCV): bilateral filter → adaptive threshold → cleanup → line thickening.
+- **`printing/`** — A4 page composition and PDF export (Pillow).
 
-O CLI (`cli.py`, typer) é uma camada fina sobre `pipeline.py` — a v2 (UI web)
-reutiliza o pipeline sem alterações.
+The CLI (`cli.py`, typer) is a thin layer over `pipeline.py` — a future web UI can
+reuse the pipeline without changes.
 
-## Testes
+## Tests
 
 ```bash
 pytest
 ```
+
+## Security
+
+See [docs/security-audit.md](docs/security-audit.md) for the full security review.
+
+Key protections:
+- SSRF guard blocks private/loopback IPs on image downloads
+- Docker runs as non-root with `cap_drop: ALL` and read-only filesystem
+- Dependency lock file (`uv.lock`) with hash-pinned versions
+- Symlink-safe file writes
+- Image dimension and download size limits
