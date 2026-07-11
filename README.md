@@ -74,8 +74,6 @@ pytest
 
 ## Security
 
-See [docs/security-audit.md](docs/security-audit.md) for the full security review.
-
 Key protections:
 - SSRF guard blocks private/loopback IPs on image downloads
 - Docker runs as non-root with `cap_drop: ALL` and read-only filesystem

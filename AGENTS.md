@@ -53,7 +53,8 @@ output/                  # Generated drawings (gitignored)
 
 ## Documentation
 
-- `docs/decisions.md` -- Architecture Decision Records (MADR 4.0)
-- `docs/roadmap.md` -- Strategic roadmap with phases
-- `docs/implementation.md` -- Technical implementation guide
-- `docs/security-audit.md` -- Security audit report
+Internal docs (gitignored, local only):
+- `docs/internal/decisions.md` -- Architecture Decision Records (MADR 4.0)
+- `docs/internal/roadmap.md` -- Strategic roadmap with phases
+- `docs/internal/implementation.md` -- Technical implementation guide
+- `docs/internal/security-audit.md` -- Security audit report

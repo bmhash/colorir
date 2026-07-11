@@ -74,8 +74,6 @@ pytest
 
 ## Seguranca
 
-Ver [docs/security-audit.md](docs/security-audit.md) para a revisao de seguranca completa.
-
 Protecoes implementadas:
 - Guarda SSRF bloqueia IPs privados/loopback nos downloads de imagens
 - Docker corre como utilizador nao-root com `cap_drop: ALL` e filesystem read-only

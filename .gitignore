@@ -24,6 +24,9 @@ build/
 .zshrc
 .mcp.json
 
+# Internal docs (security audit, roadmap, decisions — local only)
+docs/internal/
+
 # Devin/Claude local config
 .devin/
 .claude/
