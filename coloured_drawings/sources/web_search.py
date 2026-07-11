@@ -6,6 +6,7 @@ import requests
 from PIL import Image
 
 from coloured_drawings.sources.base import ImageSource, SourceError
+from coloured_drawings.sources.watermark_detector import has_watermark
 
 MIN_SIDE = 800  # resolução mínima para impressão decente (A4 @ 300 DPI = 2480×3508)
 MAX_RESULTS = 20
@@ -35,7 +36,14 @@ class WebSearchSource(ImageSource):
             raise SourceError(f"Nenhuma imagem encontrada para '{prompt}'. Tenta outras palavras.")
 
         # Ordena por tamanho reportado (maiores primeiro) para tentar alta resolução
-        results.sort(key=lambda r: (r.get("width", 0) or 0) * (r.get("height", 0) or 0), reverse=True)
+        def _size(r):
+            try:
+                w = int(r.get("width", 0) or 0)
+                h = int(r.get("height", 0) or 0)
+                return w * h
+            except (ValueError, TypeError):
+                return 0
+        results.sort(key=_size, reverse=True)
 
         for result in results:
             image = self._try_download(result.get("image", ""))
@@ -62,5 +70,8 @@ class WebSearchSource(ImageSource):
         except Exception:  # noqa: BLE001 — tenta o próximo resultado
             return None
         if min(image.size) < MIN_SIDE:
+            return None
+        # Rejeita imagens com watermark visível
+        if has_watermark(image, sensitivity=0.7):
             return None
         return image.convert("RGB")
