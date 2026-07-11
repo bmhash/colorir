@@ -1,9 +1,9 @@
-# Coloured Drawings 🎨
+# colorir 🎨
 
-Gerador de desenhos para colorir — projeto do papá e da Ninita.
+Turn any idea into a printable coloring page — just type what you want to draw.
 
-Escreves palavras sugestivas (ex: `"aladino da Disney"`), a plataforma obtém/gera
-um desenho estilo livro de colorir e produz um PDF A4 pronto a imprimir.
+Type a prompt (e.g. `"aladino da Disney"`), and the tool fetches or generates
+a coloring-book-style image and produces a print-ready A4 PDF.
 
 ## Instalação
 
@@ -31,7 +31,7 @@ colorir gerar "gato" --fonte web --abrir
 # Opções
 colorir gerar "castelo" --paisagem --sem-titulo
 colorir gerar "gato" --fonte web --detalhe 3      # 1=simples, 9=detalhado
-colorir gerar "cão" --titulo "Para a Ninita"
+colorir gerar "cão" --titulo "O meu cão"
 
 # Converter uma foto/imagem tua em página para colorir
 colorir converter foto.jpg --abrir

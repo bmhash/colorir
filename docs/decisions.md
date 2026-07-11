@@ -15,7 +15,7 @@
 ### Context and Problem Statement
 
 We need a language for a CLI tool that fetches/generates images, applies computer
-vision transforms, and produces print-ready PDFs. The developer (papá) is most
+vision transforms, and produces print-ready PDFs. The primary developer is most
 productive in Python and the ecosystem for image processing and AI APIs is
 strongest there.
 
@@ -23,7 +23,7 @@ strongest there.
 
 - Developer familiarity and velocity
 - Ecosystem maturity for image processing (OpenCV, Pillow) and AI (OpenAI SDK)
-- Rapid prototyping for a personal/family project
+- Rapid prototyping
 - Cross-platform support (Linux primary, macOS/Windows possible)
 
 ### Decision Outcome

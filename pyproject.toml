@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "coloured-drawings"
 version = "0.1.0"
-description = "Gerador de desenhos para colorir — projeto do papá e da Ninita"
+description = "Turn any idea into a printable coloring page — just type what you want to draw"
 requires-python = ">=3.11"
 dependencies = [
     "typer>=0.12",

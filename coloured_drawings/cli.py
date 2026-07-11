@@ -10,7 +10,7 @@ from coloured_drawings.sources.base import SourceError
 
 app = typer.Typer(
     name="colorir",
-    help="Gerador de desenhos para colorir — projeto do papá e da Ninita 🎨",
+    help="Turn any idea into a printable coloring page 🎨",
     no_args_is_help=True,
 )
 
