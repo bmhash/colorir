@@ -27,9 +27,10 @@ def generate(
     landscape: bool = False,
     title: str | None = None,
     detail: int = 5,
+    skip_watermark_check: bool = False,
 ) -> PipelineResult:
     """Pipeline completo a partir de um prompt de texto."""
-    source = get_source(source_name)
+    source = get_source(source_name, skip_watermark_check=skip_watermark_check)
     image = source.fetch(prompt)
     image = resize_for_a4(image, landscape=landscape)
     out_dir = make_output_dir(get_settings().output_dir, prompt)

@@ -8,14 +8,18 @@ from PIL import Image
 from coloured_drawings.sources.base import ImageSource, SourceError
 from coloured_drawings.sources.watermark_detector import has_watermark
 
-MIN_SIDE = 800  # resolução mínima para impressão decente (A4 @ 300 DPI = 2480×3508)
+MIN_SIDE = 600  # resolução mínima (691×960 já é suficiente para A4 com resize)
 MAX_RESULTS = 20
 TIMEOUT = 15
+WATERMARK_SENSITIVITY = 0.5  # 0.5 = equilibrado (0.7 era demasiado restritivo)
 
 
 class WebSearchSource(ImageSource):
     name = "web"
     produces_lineart = False
+
+    def __init__(self, skip_watermark_check: bool = False):
+        self.skip_watermark_check = skip_watermark_check
 
     def fetch(self, prompt: str) -> Image.Image:
         try:
@@ -46,16 +50,18 @@ class WebSearchSource(ImageSource):
         results.sort(key=_size, reverse=True)
 
         for result in results:
-            image = self._try_download(result.get("image", ""))
+            image = self._try_download(result.get("image", ""), self.skip_watermark_check)
             if image is not None:
                 return image
 
         raise SourceError(
-            "Não consegui descarregar nenhuma imagem utilizável. Tenta outras palavras."
+            f"Não consegui encontrar imagens sem watermark para '{prompt}'. "
+            "Tenta: (1) outras palavras, (2) --fonte ai (melhor qualidade), "
+            "ou (3) --sem-filtro-watermark (aceita watermarks)."
         )
 
     @staticmethod
-    def _try_download(url: str) -> Image.Image | None:
+    def _try_download(url: str, skip_watermark_check: bool = False) -> Image.Image | None:
         if not url:
             return None
         try:
@@ -71,7 +77,7 @@ class WebSearchSource(ImageSource):
             return None
         if min(image.size) < MIN_SIDE:
             return None
-        # Rejeita imagens com watermark visível
-        if has_watermark(image, sensitivity=0.7):
+        # Rejeita imagens com watermark visível (a menos que skip_watermark_check=True)
+        if not skip_watermark_check and has_watermark(image, sensitivity=WATERMARK_SENSITIVITY):
             return None
         return image.convert("RGB")

@@ -3,7 +3,7 @@
 from coloured_drawings.sources.base import ImageSource, SourceError
 
 
-def get_source(name: str) -> ImageSource:
+def get_source(name: str, **kwargs) -> ImageSource:
     """Devolve a fonte de imagem pelo nome ('ai' ou 'web')."""
     if name == "ai":
         from coloured_drawings.sources.ai_generator import AIGeneratorSource
@@ -12,5 +12,5 @@ def get_source(name: str) -> ImageSource:
     if name == "web":
         from coloured_drawings.sources.web_search import WebSearchSource
 
-        return WebSearchSource()
+        return WebSearchSource(**kwargs)
     raise SourceError(f"Fonte desconhecida: '{name}'. Usa 'ai' ou 'web'.")

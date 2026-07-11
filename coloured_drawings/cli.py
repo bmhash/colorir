@@ -26,6 +26,10 @@ def gerar(
         5, "--detalhe", "-d", min=1, max=9,
         help="Nível de detalhe do line-art (1=simples, 9=detalhado; só na fonte web)",
     ),
+    sem_filtro_watermark: bool = typer.Option(
+        False, "--sem-filtro-watermark",
+        help="Aceita imagens com watermark (só fonte web)",
+    ),
 ) -> None:
     """Gera um desenho para colorir a partir de palavras sugestivas."""
     from coloured_drawings.pipeline import generate
@@ -34,7 +38,8 @@ def gerar(
     typer.echo(f"🖍️  A gerar '{prompt}' (fonte: {fonte})...")
     try:
         result = generate(prompt, source_name=fonte, landscape=paisagem,
-                          title=page_title, detail=detalhe)
+                          title=page_title, detail=detalhe,
+                          skip_watermark_check=sem_filtro_watermark)
     except SourceError as exc:
         typer.secho(f"Erro: {exc}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1)
