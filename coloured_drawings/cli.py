@@ -30,6 +30,10 @@ def gerar(
         False, "--sem-filtro-watermark",
         help="Aceita imagens com watermark (só fonte web)",
     ),
+    abrir: bool = typer.Option(
+        False, "--abrir", "-a",
+        help="Abre o PDF automaticamente após gerar",
+    ),
 ) -> None:
     """Gera um desenho para colorir a partir de palavras sugestivas."""
     from coloured_drawings.pipeline import generate
@@ -44,6 +48,8 @@ def gerar(
         typer.secho(f"Erro: {exc}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1)
     typer.secho(f"✅ Pronto! PDF para imprimir: {result.pdf}", fg=typer.colors.GREEN)
+    if abrir:
+        _open_pdf(result.pdf)
 
 
 @app.command()
@@ -54,6 +60,10 @@ def converter(
     titulo: Optional[str] = typer.Option(None, "--titulo", "-t", help="Título na página"),
     detalhe: int = typer.Option(5, "--detalhe", "-d", min=1, max=9,
                                 help="Nível de detalhe do line-art"),
+    abrir: bool = typer.Option(
+        False, "--abrir", "-a",
+        help="Abre o PDF automaticamente após converter",
+    ),
 ) -> None:
     """Converte uma imagem tua em página para colorir."""
     from coloured_drawings.pipeline import convert_file
@@ -61,6 +71,8 @@ def converter(
     typer.echo(f"🖍️  A converter '{ficheiro}'...")
     result = convert_file(ficheiro, landscape=paisagem, title=titulo, detail=detalhe)
     typer.secho(f"✅ Pronto! PDF para imprimir: {result.pdf}", fg=typer.colors.GREEN)
+    if abrir:
+        _open_pdf(result.pdf)
 
 
 @app.command()
@@ -78,6 +90,15 @@ def listar() -> None:
         pdf = entry / "print.pdf"
         marker = "📄" if pdf.exists() else "⚠️ "
         typer.echo(f"{marker} {entry.name}")
+
+
+def _open_pdf(path: Path) -> None:
+    """Tenta abrir o PDF no visualizador do sistema."""
+    from coloured_drawings.opener import open_file
+
+    if not open_file(path):
+        typer.echo("💡 Não consegui abrir automaticamente. Abre manualmente:")
+        typer.echo(f"   {path.resolve()}")
 
 
 if __name__ == "__main__":

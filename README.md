@@ -25,13 +25,16 @@ colorir gerar "aladino da Disney"
 # Fonte gratuita: pesquisa web + conversão para line-art
 colorir gerar "sereia" --fonte web
 
+# Gerar e abrir o PDF automaticamente (WSL2, Linux, macOS)
+colorir gerar "gato" --fonte web --abrir
+
 # Opções
 colorir gerar "castelo" --paisagem --sem-titulo
 colorir gerar "gato" --fonte web --detalhe 3      # 1=simples, 9=detalhado
 colorir gerar "cão" --titulo "Para a Ninita"
 
 # Converter uma foto/imagem tua em página para colorir
-colorir converter foto.jpg
+colorir converter foto.jpg --abrir
 
 # Listar desenhos já gerados
 colorir listar

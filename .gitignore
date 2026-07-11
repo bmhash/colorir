@@ -8,3 +8,22 @@ output/
 .pytest_cache/
 dist/
 build/
+
+# IDE / editor
+.idea/
+.vscode/
+
+# Sandbox artifacts (bubblewrap mount stubs)
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.profile
+.ripgreprc
+.zprofile
+.zshrc
+.mcp.json
+
+# Devin/Claude local config
+.devin/
+.claude/

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# Environment
+.env
+
+# Output (user mounts their own)
+output/
+
+# Dev/IDE
+.git/
+.github/
+.idea/
+.vscode/
+.claude/
+.devin/
+.pytest_cache/
+tests/
+docs/
+
+# OS
+.DS_Store
+Thumbs.db
