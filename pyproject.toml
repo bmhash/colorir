@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "coloured-drawings"
+version = "0.1.0"
+description = "Gerador de desenhos para colorir — projeto do papá e da Ninita"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.12",
+    "pillow>=10.2",
+    "opencv-python-headless>=4.9",
+    "numpy>=1.26",
+    "requests>=2.31",
+    "ddgs>=9.0",
+    "openai>=1.30",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+colorir = "coloured_drawings.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["coloured_drawings"]
