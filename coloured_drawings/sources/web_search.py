@@ -7,8 +7,8 @@ from PIL import Image
 
 from coloured_drawings.sources.base import ImageSource, SourceError
 
-MIN_SIDE = 400  # rejeita imagens demasiado pequenas para imprimir
-MAX_RESULTS = 12
+MIN_SIDE = 800  # resolução mínima para impressão decente (A4 @ 300 DPI = 2480×3508)
+MAX_RESULTS = 20
 TIMEOUT = 15
 
 
@@ -26,13 +26,16 @@ class WebSearchSource(ImageSource):
         try:
             with DDGS() as ddgs:
                 results = list(
-                    ddgs.images(query, safesearch="on", max_results=MAX_RESULTS)
+                    ddgs.images(query, safesearch="on", max_results=MAX_RESULTS, size="Large")
                 )
         except Exception as exc:  # noqa: BLE001
             raise SourceError(f"Falha na pesquisa web: {exc}") from exc
 
         if not results:
             raise SourceError(f"Nenhuma imagem encontrada para '{prompt}'. Tenta outras palavras.")
+
+        # Ordena por tamanho reportado (maiores primeiro) para tentar alta resolução
+        results.sort(key=lambda r: (r.get("width", 0) or 0) * (r.get("height", 0) or 0), reverse=True)
 
         for result in results:
             image = self._try_download(result.get("image", ""))
