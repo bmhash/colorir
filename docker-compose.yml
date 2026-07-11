@@ -1,10 +1,19 @@
 services:
   colorir:
     build: .
+    user: "${UID:-1000}:${GID:-1000}"
     volumes:
-      - ./output:/app/output
+      - ./output:/app/output:rw
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - COLORIR_AI_MODEL=${COLORIR_AI_MODEL:-gpt-image-1}
+    # Security hardening
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     # Override CMD to run interactively:
     #   docker compose run colorir gerar "unicornio" --fonte web

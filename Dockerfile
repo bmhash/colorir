@@ -27,13 +27,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
+# Create non-root user (uid 1000 matches most host users for volume mounts)
+RUN groupadd -g 1000 colorir && useradd -u 1000 -g 1000 -d /app colorir
+
 # Copy installed Python packages (includes our package + all deps)
 COPY --from=builder /install /usr/local
 
 # Output directory (mount point for users)
 WORKDIR /app
-RUN mkdir -p /app/output
+RUN mkdir -p /app/output && chown -R colorir:colorir /app
 VOLUME ["/app/output"]
+
+# Switch to non-root user
+USER colorir
 
 # Default env
 ENV COLORIR_OUTPUT_DIR=/app/output

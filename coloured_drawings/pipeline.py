@@ -61,12 +61,19 @@ def _finish(
     detail: int,
 ) -> PipelineResult:
     original_path = out_dir / "original.png"
-    image.save(original_path)
+    _safe_save(image, original_path)
 
     lineart = image if skip_conversion else to_lineart(image, detail=detail)
     lineart_path = out_dir / "lineart.png"
-    lineart.save(lineart_path)
+    _safe_save(lineart, lineart_path)
 
     pdf_path = make_print_pdf(lineart, out_dir / "print.pdf", landscape=landscape, title=title)
     return PipelineResult(out_dir=out_dir, original=original_path,
                           lineart=lineart_path, pdf=pdf_path)
+
+
+def _safe_save(image: Image.Image, path: Path) -> None:
+    """Save image, refusing to follow symlinks or overwrite existing files."""
+    if path.is_symlink() or path.exists():
+        raise OSError(f"Refusing to write: path already exists or is a symlink: {path}")
+    image.save(path)
