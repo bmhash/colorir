@@ -72,11 +72,4 @@ reuse the pipeline without changes.
 pytest
 ```
 
-## Security
 
-Key protections:
-- SSRF guard blocks private/loopback IPs on image downloads
-- Docker runs as non-root with `cap_drop: ALL` and read-only filesystem
-- Dependency lock file (`uv.lock`) with hash-pinned versions
-- Symlink-safe file writes
-- Image dimension and download size limits

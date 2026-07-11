@@ -72,11 +72,3 @@ reutiliza o pipeline sem alteracoes.
 pytest
 ```
 
-## Seguranca
-
-Protecoes implementadas:
-- Guarda SSRF bloqueia IPs privados/loopback nos downloads de imagens
-- Docker corre como utilizador nao-root com `cap_drop: ALL` e filesystem read-only
-- Ficheiro de lock de dependencias (`uv.lock`) com versoes hash-pinned
-- Escrita de ficheiros protegida contra symlinks
-- Limites de dimensao de imagem e tamanho de download
